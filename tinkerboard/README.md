@@ -1,13 +1,11 @@
 # Tinkerboard (Pre-Prod Server)
 
-Is it just me or this seems more responsive than Raspberry Pi 4 4g ? :)
-
-Model: Asus Tinkerboard
-OS: https://www.armbian.com/tinkerboard/ 
-Architecture: armhf
+- Model: Asus Tinkerboard
+- OS: https://www.armbian.com/tinkerboard/
+- Architecture: armhf
 
 ```bash
-# Emby
+# Emby Test
 docker run -d \
     --volume /mnt/media/config:/config \
     --volume /mnt/media/media:/mnt/share1 \
@@ -23,7 +21,7 @@ docker run -d \
     --name emby \
     emby/embyserver_arm32v7
 
-# Plex    
+# Plex Test 
 docker create \
   --name=plex \
   --net=host \
@@ -37,4 +35,5 @@ docker create \
   -v /path/to/movies:/movies \
   --restart unless-stopped \
   linuxserver/plex
+
 ```

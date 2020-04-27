@@ -13,8 +13,10 @@ sudo useradd --system node_exporter # not sure if it is necessary
 
 ## systemd service
 
-Create the service file: `/etc/systemd/system/node_exporter.service`
-create the env file    : `/opt/node_exporter/env` (empty or not it needs to be there)  
+Deploy as systemd service. Docker container version requires many volumes to be mounted inside the container.. got bored gave up !
+
+- Create the service file: `/etc/systemd/system/node_exporter.service`
+- create the env file    : `/opt/node_exporter/env` (empty or not it needs to be there)  
 
 ```bash
 sudo systemctl daemon-reload           # 

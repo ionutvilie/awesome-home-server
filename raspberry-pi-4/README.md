@@ -1,12 +1,12 @@
 # Raspberry Pi 4
 
-Model: Raspberry Pi 4 4g
-Architecture: arm64
-OS: https://ubuntu.com/download/raspberry-pi Ubuntu Pi 64-bit
+- Model: Raspberry Pi 4 4g
+- Architecture: arm64
+- OS: <a href="https://ubuntu.com/download/raspberry-pi"> Ubuntu Pi 64-bit</a>
 
 ## Mount external storage
 
-Mount Seagate 2T Slim drive as explained here: https://www.techrepublic.com/article/how-to-properly-automount-a-drive-in-ubuntu-linux/ 
+Mount Seagate 2T Slim drive as explained <a href="https://www.techrepublic.com/article/how-to-properly-automount-a-drive-in-ubuntu-linux/">here</a>
 
 ```bash
 mkdir -p /mnt/sgt2t
@@ -17,8 +17,9 @@ UUID=98db3b27-e3fa-4cfe-906f-bcbd4db335b7 /mnt/sgt2t ext4    errors=remount-ro,a
 
 ## Software
 
-### Docker.io
+### Docker
 
+Install Docker 
 
 ```bash 
 # atm there is no official docker support for focal (no focal in https://download.docker.com/linux/ubuntu/dists/)
@@ -29,7 +30,7 @@ sudo apt install docker.io
 
 ### qbittorrent 
 
-qBittorrent in docker (qBittorrent-nox)
+Deploy qBittorrent in Docker
 
 ```bash 
 docker create \
@@ -54,8 +55,9 @@ Open the web ui on board IP and port 8080
 ### DLNA server (works with Samsung Smart TV's)
 
 
-Small DLNA Server using `rclone serve dlna` (serve a local folder)
-The image was build on raspberry pi using the Dockerfile from rclone-dlna folder
+Small DLNA Server using `rclone serve dlna` (serve a local folder) The image was build on raspberry pi using the Dockerfile from [rclone-dlna folder](../rclone-dlna) 
+
+Deploy DLNA Server in Docker
 
 ```bash
 docker create \
@@ -74,3 +76,6 @@ docker start rpi-dlna
 ```
 
 ### Node Exporter (Prometheus)
+
+
+[node_exporter folder](../node_exporter) 
