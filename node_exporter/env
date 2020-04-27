@@ -1,0 +1,1 @@
+OPTIONS='--web.disable-exporter-metrics --log.level=error'
