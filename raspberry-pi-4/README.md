@@ -79,3 +79,36 @@ docker start rpi-dlna
 
 
 [node_exporter folder](../node_exporter) 
+
+
+
+### ADGUARD HOME
+
+https://blog.linuxserver.io/2019/05/20/adguard-home-first-thoughts/
+
+```
+# create macvlan network
+# https://docs.docker.com/network/macvlan/ 
+
+docker network create \
+  --driver macvlan \
+  --subnet=192.168.100.0/24 \
+  --ip-range=192.168.100.128/25 \
+  --gateway=192.168.100.1 \
+  --opt parent=eth0 macvlan
+
+
+# create and start a new adguard home container 
+docker create \
+  --name=adguardhome \
+  --hostname=adguardhome-dns \
+  --label=dns-server \
+  --net=macvlan \
+  --ip 192.168.100.128 \
+  -v /mnt/sgt2t/config/adguard-home/work:/opt/adguardhome/work \
+  -v /mnt/sgt2t/config/adguard-home/conf:/opt/adguardhome/conf \
+  --restart unless-stopped \
+  adguard/adguardhome:arm64-latest
+
+docker start adguardhome
+```
