@@ -52,6 +52,23 @@ docker start qbittorrent
 ```
 Open the web ui on board IP and port 8080
 
+### filebrowser
+
+
+```bash
+docker create \
+  --name=filebrowser \
+  -v /mnt/sgt2t/media/:/srv \
+  -v /mnt/sgt2t/config/filebrowser/database.db:/database.db \
+  -v /mnt/sgt2t/config/filebrowser/.filebrowser.json:/.filebrowser.json \
+  -p 8081:80 \
+  --restart unless-stopped \
+  filebrowser/filebrowser
+  
+docker start filebrowser
+```
+
+
 ### DLNA server (works with Samsung Smart TV's)
 
 
