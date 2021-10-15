@@ -1,0 +1,89 @@
+version: "3.9"
+services: 
+  portainer:
+    image: portainer/portainer-ce:alpine
+    hostname: portainer
+    container_name: portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/sgt2t/config/portainer:/data 
+    ports:
+      - 8000:8000
+      - 9000:9000
+      - 9443:9443
+    restart: unless-stopped
+    network_mode: bridge
+
+  rpi-dlna:
+    image:  ionutvilie/rclone
+    hostname: rpi-dlna
+    container_name: rpi-dlna
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - VERSION=docker
+    volumes:
+      - /mnt/sgt2t/config/rclone:/config
+      - /mnt/sgt2t/media:/media
+    restart: unless-stopped  
+    network_mode: host
+
+  qbittorrent:
+    image: linuxserver/qbittorrent
+    hostname: qbittorrent
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - TZ=Europe/London
+      - WEBUI_PORT=8080
+    volumes:
+      - /mnt/sgt2t/config/qbittorrent:/config
+      - /mnt/sgt2t/media:/downloads
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      - 8080:8080
+    restart: unless-stopped
+    network_mode: bridge
+
+  filebrowser:
+    image: filebrowser/filebrowser
+    hostname: filebrowser
+    container_name: filebrowser
+    volumes:
+      - /mnt/sgt2t/media/:/srv
+      - /mnt/sgt2t/config/filebrowser/database.db:/database.db
+      - /mnt/sgt2t/config/filebrowser/.filebrowser.json:/.filebrowser.json
+    ports:
+      - 8081:80
+    restart: unless-stopped
+    network_mode: bridge
+
+  adguardhome:
+    image: adguard/adguardhome:arm64-latest
+    hostname: adguardhome
+    container_name: adguardhome
+    volumes:
+      - /mnt/sgt2t/config/adguard-home/work:/opt/adguardhome/work
+      - /mnt/sgt2t/config/adguard-home/conf:/opt/adguardhome/conf
+    restart: unless-stopped
+    networks:
+      macvlan:
+        ipv4_address: 192.168.100.128
+    restart: unless-stopped
+
+networks:
+  macvlan:
+    name: macvlan
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.100.0/24
+          gateway: 192.168.1.1
+          ip_range: 192.168.100.128/25
