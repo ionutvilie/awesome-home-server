@@ -3,7 +3,7 @@
 FROM alpine:latest as rclone-getter
 RUN apk --no-cache add curl
 
-RUN curl -L https://github.com/rclone/rclone/releases/download/v1.51.0/rclone-v1.51.0-linux-arm64.zip -o rclone.zip && \
+RUN curl -L https://github.com/rclone/rclone/releases/download/v1.56.2/rclone-v1.56.2-linux-arm64.zip -o rclone.zip && \
     unzip rclone.zip
 
 # build the main image (official docker file with some asmall changes)
