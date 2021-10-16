@@ -19,7 +19,7 @@ UUID=98db3b27-e3fa-4cfe-906f-bcbd4db335b7 /mnt/sgt2t ext4    errors=remount-ro,a
 
 ### Docker
 
-Install Docker 
+Install Docker & docker-compose 
 
 ```bash 
 # atm there is no official docker support for focal (no focal in https://download.docker.com/linux/ubuntu/dists/)
@@ -27,6 +27,18 @@ Install Docker
 # install docker from the official ubuntu repo
 sudo apt install docker.io
 ```
+
+## Docker docker-compose
+
+```sh
+# run the stack
+docker-compose up -d 
+# rebuild individual services
+docker-compose up -d --no-deps --build rpi-dlna
+```
+
+
+## Docker manual run
 
 ### qbittorrent 
 
