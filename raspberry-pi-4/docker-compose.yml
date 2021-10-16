@@ -15,7 +15,12 @@ services:
     network_mode: bridge
 
   rpi-dlna:
-    image:  ionutvilie/rclone
+    build:
+      args:
+        - RCLONE_VERSION=1.56.2
+        - RCLONE_ARCH=arm64
+      dockerfile: rclone.Dockerfile
+    image:  ionutvilie/rclone-dlna:latest
     hostname: rpi-dlna
     container_name: rpi-dlna
     environment:
