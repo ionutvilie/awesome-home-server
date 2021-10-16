@@ -141,3 +141,24 @@ docker create \
 
 docker start adguardhome
 ```
+### Envoy Proxy
+
+
+
+
+```bash
+# qbittorrent and portainer does not work because in the html there are assets requested from the root path
+# are assets requested from the root path.
+# envoy arm64 binary can be copied from the official docker image.
+./envoy -c envoy.yaml -l debug --service-cluster proxy
+
+docker run --rm \
+  --name=envoy-proxy \
+  -e CONFIG_FILE=/opt/envoy/envoy.yaml \
+  -e LOG_LEVEL=info \
+  -e SERVICE_CLUSTER=proxy \
+  -v ${PWD}/envoy.yaml:/opt/envoy/envoy.yaml \
+  -p 8085:8090 \
+  -p 8086:8091 \
+  envoyproxy/envoy:v1.20-latest -c /opt/envoy/envoy.yaml -l info --service-cluster proxy
+```
