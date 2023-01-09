@@ -1,12 +1,12 @@
 version: "3.9"
-services: 
+services:
   portainer:
     image: portainer/portainer-ce:alpine
     hostname: portainer
     container_name: portainer
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/sgt2t/config/portainer:/data 
+      - /mnt/sgt2t/config/portainer:/data
     ports:
       - 8000:8000
       - 9000:9000
@@ -14,15 +14,11 @@ services:
     restart: unless-stopped
     network_mode: bridge
 
-  rpi-dlna:
-    build:
-      args:
-        - RCLONE_VERSION=1.56.2
-        - RCLONE_ARCH=arm64
-      dockerfile: rclone.Dockerfile
-    image:  ionutvilie/rclone-dlna:latest
-    hostname: rpi-dlna
-    container_name: rpi-dlna
+  rclone-dlna:
+    image: rclone/rclone:latest
+    hostname: rclone-dlna
+    container_name: rclone-dlna
+    command: [ "serve", "dlna", "/media/", "--addr", ":8090", "--name", "rclone-dlna", "--read-only" ]
     environment:
       - PUID=1000
       - PGID=1000
@@ -31,7 +27,21 @@ services:
     volumes:
       - /mnt/sgt2t/config/rclone:/config
       - /mnt/sgt2t/media:/media
-    restart: unless-stopped  
+    restart: unless-stopped
+    network_mode: host
+
+  gerbera:
+    image: gerbera/gerbera:1.12.1
+    container_name: gerbera
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - VERSION=docker
+    volumes:
+      - /mnt/sgt2t/media:/content
+      - /mnt/sgt2t/config/gerbera:/var/run/gerbera
+    restart: unless-stopped
     network_mode: host
 
   qbittorrent:
@@ -68,7 +78,8 @@ services:
     network_mode: bridge
 
   adguardhome:
-    image: adguard/adguardhome:arm64-latest
+    # image: adguard/adguardhome:arm64-latest
+    image: adguard/adguardhome:latest
     hostname: adguardhome
     container_name: adguardhome
     volumes:
@@ -78,9 +89,57 @@ services:
     networks:
       macvlan:
         ipv4_address: 192.168.100.128
+
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    hostname: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/sgt2t/config/jellyfin/config:/config
+      - /mnt/sgt2t/config/jellyfin/cache:/cache
+      - /mnt/sgt2t/media2:/media
+    restart: "unless-stopped"
+    networks:
+      macvlan:
+        ipv4_address: 192.168.100.129
+
+  qbittorrent2:
+    image: linuxserver/qbittorrent
+    hostname: qbittorrent2
+    container_name: qbittorrent2
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - TZ=Europe/London
+      - WEBUI_PORT=8080
+    volumes:
+      - /mnt/sgt2t/config/qbittorrent2:/config
+      - /mnt/sgt2t/media2:/downloads
     restart: unless-stopped
+    networks:
+      macvlan:
+        ipv4_address: 192.168.100.130
+
+  homepage:
+    image: ghcr.io/benphelps/homepage:latest
+    hostname: homepage
+    container_name: homepage
+    user: 1000:1000 # Optional, change to your user and group IDs for permissions
+    ports:
+      - 3000:3000
+    volumes:
+      - /mnt/sgt2t/config/homepage:/app/config # Make sure your local config directory is exists
+      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+      - /mnt/sgt2t:/mnt/sgt2t # Make sure your local config directory is exists
 
 networks:
+  # svc-net:
+  #   name: svc-net
+  #   driver: bridge
   macvlan:
     name: macvlan
     driver: macvlan
@@ -92,3 +151,4 @@ networks:
         - subnet: 192.168.100.0/24
           gateway: 192.168.1.1
           ip_range: 192.168.100.128/25
+

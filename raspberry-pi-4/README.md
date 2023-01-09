@@ -11,7 +11,7 @@ Mount Seagate 2T Slim drive as explained <a href="https://www.techrepublic.com/a
 ```bash
 mkdir -p /mnt/sgt2t
 # `fdisk -l` and `blkid` for the the uuid
-sudo vim /etc/fstab # and append below line 
+sudo vim /etc/fstab # and append below line
 UUID=98db3b27-e3fa-4cfe-906f-bcbd4db335b7 /mnt/sgt2t ext4    errors=remount-ro,auto,exec,rw,user 0       0
 ```
 
@@ -19,9 +19,9 @@ UUID=98db3b27-e3fa-4cfe-906f-bcbd4db335b7 /mnt/sgt2t ext4    errors=remount-ro,a
 
 ### Docker
 
-Install Docker & docker-compose 
+Install Docker & docker-compose
 
-```bash 
+```bash
 # atm there is no official docker support for focal (no focal in https://download.docker.com/linux/ubuntu/dists/)
 # https://www.docker.com/blog/getting-started-with-docker-for-arm-on-linux/
 # install docker from the official ubuntu repo
@@ -32,19 +32,19 @@ sudo apt install docker.io
 
 ```sh
 # run the stack
-docker-compose up -d 
-# rebuild individual services
-docker-compose up -d --no-deps --build rpi-dlna
+docker-compose up -d
+# pull latest images
+docker-compose pull
 ```
 
 
 ## Docker manual run
 
-### qbittorrent 
+### qbittorrent
 
 Deploy qBittorrent in Docker
 
-```bash 
+```bash
 docker create \
   --name=qbittorrent \
   -e PUID=1000 \
@@ -60,7 +60,7 @@ docker create \
   --restart unless-stopped \
   linuxserver/qbittorrent
 
-docker start qbittorrent 
+docker start qbittorrent
 ```
 Open the web ui on board IP and port 8080
 
@@ -76,7 +76,7 @@ docker create \
   -p 8081:80 \
   --restart unless-stopped \
   filebrowser/filebrowser
-  
+
 docker start filebrowser
 ```
 
@@ -84,7 +84,7 @@ docker start filebrowser
 ### DLNA server (works with Samsung Smart TV's)
 
 
-Small DLNA Server using `rclone serve dlna` (serve a local folder) The image was build on raspberry pi using the Dockerfile from [rclone-dlna folder](../rclone-dlna) 
+Small DLNA Server using `rclone serve dlna` (serve a local folder) The image was build on raspberry pi using the Dockerfile from [rclone-dlna folder](../rclone-dlna)
 
 Deploy DLNA Server in Docker
 
@@ -101,13 +101,13 @@ docker create \
   --restart unless-stopped \
   ionutvilie/rclone
 
-docker start rpi-dlna  
+docker start rpi-dlna
 ```
 
 ### Node Exporter (Prometheus)
 
 
-[node_exporter folder](../node_exporter) 
+[node_exporter folder](../node_exporter)
 
 
 
@@ -117,7 +117,7 @@ https://blog.linuxserver.io/2019/05/20/adguard-home-first-thoughts/
 
 ```
 # create macvlan network
-# https://docs.docker.com/network/macvlan/ 
+# https://docs.docker.com/network/macvlan/
 
 docker network create \
   --driver macvlan \
@@ -127,7 +127,7 @@ docker network create \
   --opt parent=eth0 macvlan
 
 
-# create and start a new adguard home container 
+# create and start a new adguard home container
 docker create \
   --name=adguardhome \
   --hostname=adguardhome-dns \
@@ -147,7 +147,7 @@ docker start adguardhome
 
 
 ```bash
-# qbittorrent and portainer does not work because in the html there are assets requested from the root path
+# qbittorrent and portainer does not work because in the html there
 # are assets requested from the root path.
 # envoy arm64 binary can be copied from the official docker image.
 ./envoy -c envoy.yaml -l debug --service-cluster proxy
@@ -161,4 +161,19 @@ docker run --rm \
   -p 8085:8090 \
   -p 8086:8091 \
   envoyproxy/envoy:v1.20-latest -c /opt/envoy/envoy.yaml -l info --service-cluster proxy
+```
+
+### Test
+
+```
+docker run -d \
+  --name=homeassistant \
+  --net=host \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Europe/London \
+  -p 8123:8123 `#optional` \
+  -v /mnt/sgt2t/config/homeassistant/conf:/config \
+  --restart unless-stopped \
+  lscr.io/linuxserver/homeassistant
 ```
