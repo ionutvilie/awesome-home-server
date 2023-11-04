@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jellyfin
+spec:
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |
+          [
+              {
+                  "namespace": "kube-system",
+                  "name": "home-network",
+                  "ips": ["192.168.100.220"]
+              }
+          ]
+    spec:
+      # for DLNA to broadcast on the node network
+      # hostNetwork: true
+      containers:
+        - name: jellyfin
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: cache
+              mountPath: /cache
+            - name: media
+              mountPath: /media
+          #   - name: dev-dri
+          #     mountPath: /dev/dri/
+          # securityContext:
+          #   allowPrivilegeEscalation: true
+      volumes:
+        - name: config
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/config/jellyfin/config
+        - name: cache
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/config/jellyfin/cache
+        - name: media
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/media
+        # - name: dev-dri
+        #   hostPath:
+        #     path: /dev/dri/

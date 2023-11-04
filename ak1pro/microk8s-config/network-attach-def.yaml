@@ -1,0 +1,26 @@
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: home-network
+  namespace: kube-system
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.0",
+      "type": "macvlan",
+      "name": "home-network",
+      "master": "enp1s0",
+      "mode": "bridge",
+      "ipam": {
+          "type": "host-local",
+          "ranges": [
+              [{
+                    "subnet": "192.168.100.0/24",
+                    "rangeStart": "192.168.100.220",
+                    "rangeEnd": "192.168.100.230",
+                    "gateway": "192.168.100.1"
+              }]
+          ]
+      }
+    }

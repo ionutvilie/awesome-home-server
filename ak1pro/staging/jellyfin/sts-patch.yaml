@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jellyfin
+spec:
+  template:
+    spec:
+      # for DLNA to broadcast on the node network
+      # hostNetwork: true
+      containers:
+        - name: jellyfin
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: cache
+              mountPath: /cache
+            - name: media
+              mountPath: /media
+          #   - name: dev-dri
+          #     mountPath: /dev/dri/
+          # securityContext:
+          #   allowPrivilegeEscalation: true
+      volumes:
+        - name: config
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/config/jellyfin2/config
+        - name: cache
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/config/jellyfin2/cache
+        - name: media
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/media2
+        # - name: dev-dri
+        #   hostPath:
+        #     path: /dev/dri/

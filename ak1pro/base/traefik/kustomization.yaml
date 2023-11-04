@@ -1,0 +1,38 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kube-public
+
+images:
+  - name: traefik
+    newName: traefik
+    newTag: v2.10
+
+resources:
+  - 00-account.yml
+  - 00-role.yml
+  - 01-role-binding.yml
+  - 02-traefik-services.yml
+  - 02-traefik.yml
+
+labels:
+  - includeSelectors: true
+    pairs:
+      app: traefik
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/loadBalancerIP
+        value: 192.168.100.200
+    target:
+      kind: Service
+      name: traefik-web-service
+      version: v1
+  - patch: |-
+      - op: add
+        path: /spec/loadBalancerIP
+        value: 192.168.100.201
+    target:
+      kind: Service
+      name: traefik-dashboard-service
+      version: v1

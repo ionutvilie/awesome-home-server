@@ -1,0 +1,28 @@
+protocolHttp: true
+extraArgs:
+  - --enable-skip-login
+  - --enable-insecure-login
+  - --insecure-bind-address=0.0.0.0
+  - --disable-settings-authorizer
+  - --api-log-level=none
+
+service:
+  type: ClusterIP
+  # Dashboard service port
+  externalPort: 80
+
+metricsScraper:
+  enabled: true
+  args:
+    - --log-level=error
+    - --logtostderr=true
+metrics-server:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 200Mi
+  limits:
+    cpu: 500m
+    memory: 200Mi

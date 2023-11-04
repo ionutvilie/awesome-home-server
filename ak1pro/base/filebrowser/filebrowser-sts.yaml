@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: filebrowser
+spec:
+  serviceName: filebrowser
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: filebrowser
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: filebrowser
+    spec:
+      containers:
+        - name: filebrowser
+          image: filebrowser/filebrowser:latest
+          env:
+            - name: TZ
+              value: Europe/Bucharest
+          ports:
+            - name: web-ui
+              containerPort: 80
+          volumeMounts:
+            - name: data
+              mountPath: /srv
+            - name: database
+              mountPath: /database.db
+            - name: filebrowser-json
+              mountPath: /.filebrowser.json
+      volumes:
+        - name: data
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/media/
+        - name: database
+          hostPath:
+            type: File
+            path: /mnt/smg2t/config/filebrowser/database.db
+        - name: filebrowser-json
+          hostPath:
+            type: File
+            path: /mnt/smg2t/config/filebrowser/.filebrowser.json

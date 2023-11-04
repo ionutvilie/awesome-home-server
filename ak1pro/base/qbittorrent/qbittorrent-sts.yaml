@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qbittorrent
+  namespace: staging
+spec:
+  serviceName: qbittorrent
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qbittorrent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qbittorrent
+    spec:
+      containers:
+        - name: qbittorrent
+          image: linuxserver/qbittorrent:latest
+          env:
+            - name: TZ
+              value: Europe/Bucharest
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK_SET
+              value: "022"
+            - name: WEBUI_PORT
+              value: "8080"
+          ports:
+            - name: web-ui
+              containerPort: 8080
+            - name: listener
+              containerPort: 6881
+          volumeMounts:
+            # - name: config
+            #   mountPath: /config
+            # - name: downloads
+            #   mountPath: /downloads
+      volumes:
+        # - name: config
+        #   hostPath:
+        #     type: Directory
+        #     path: /mnt/smg2t/config/qbittorrent2
+        # - name: downloads
+        #   hostPath:
+        #     type: Directory
+        #     path: /mnt/smg2t/media2

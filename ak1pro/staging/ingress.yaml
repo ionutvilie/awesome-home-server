@@ -1,0 +1,34 @@
+# migrated to k8s gateway-api
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: home-staging
+#   namespace: staging
+#   annotations:
+#     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+#     traefik.ingress.kubernetes.io/router.tls: "true"
+# spec:
+#   rules:
+#     - host: jf-staging.cp.n1l.ro
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: jellyfin
+#                 port:
+#                   name: web-ui
+#     - host: qb-staging.cp.n1l.ro
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: qbittorrent
+#                 port:
+#                   name: web-ui
+#   # traefik is using the wildcard cert loaded from the prod ns
+#   # tls:
+#   #   - secretName: cp-n1l-ro-tls

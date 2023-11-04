@@ -1,0 +1,23 @@
+entryPoints:
+  web:
+    address: ":80"
+    forwardedHeaders:
+      insecure: true
+  websecure:
+    address: ":443"
+    forwardedHeaders:
+      insecure: true
+    http:
+      tls:
+        certResolver: default
+  admin:
+    address: ":9000"
+serversTransport:
+  insecureSkipVerify: true
+providers:
+  providersThrottleDuration: 2s
+  kubernetesCRD: {}
+  kubernetesIngress:
+    throttleDuration: 0s
+api:
+  dashboard: true

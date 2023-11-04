@@ -1,0 +1,214 @@
+version: "3.9"
+services:
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    hostname: homarr
+    container_name: homarr
+    environment:
+      - TZ=Europe/Bucharest
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/smg2t/config/homarr/configs:/app/data/configs
+      - /mnt/smg2t/config/homarr/icons:/app/public/icons
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:7575
+    restart: unless-stopped
+    network_mode: bridge
+
+  # qbittorrent:
+  #   image: linuxserver/qbittorrent:latest
+  #   hostname: qbittorrent
+  #   container_name: qbittorrent
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - UMASK_SET=022
+  #     - WEBUI_PORT=8080
+  #   volumes:
+  #     - /mnt/smg2t/config/qbittorrent:/config
+  #     - /mnt/smg2t/media:/downloads
+  #   ports:
+  #     - 8080:8080
+  #     - 6881:6881
+  #     - 6881:6881/udp
+  #   restart: unless-stopped
+  #   network_mode: bridge
+
+  # gerbera:
+  #   image: gerbera/gerbera:latest
+  #   container_name: gerbera
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - UMASK_SET=022
+  #     - VERSION=docker
+  #   volumes:
+  #     - /mnt/smg2t/media:/content
+  #     - /mnt/smg2t/config/gerbera:/var/run/gerbera
+  #   restart: unless-stopped
+  #   network_mode: host
+
+  # portainer:
+  #   image: portainer/portainer-ce:alpine
+  #   hostname: portainer
+  #   container_name: portainer
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - /mnt/smg2t/config/portainer:/data
+  #   ports:
+  #     - 8000:8000
+  #     - 9000:9000
+  #     - 9443:9443
+  #   restart: unless-stopped
+  #   network_mode: bridge
+
+  # filebrowser:
+  #   image: filebrowser/filebrowser:latest
+  #   hostname: filebrowser
+  #   container_name: filebrowser
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #   volumes:
+  #     - /mnt/smg2t/media/:/srv
+  #     - /mnt/smg2t/config/filebrowser/database.db:/database.db
+  #     - /mnt/smg2t/config/filebrowser/.filebrowser.json:/.filebrowser.json
+  #   ports:
+  #     - 8081:80
+  #   restart: unless-stopped
+  #   network_mode: bridge
+
+  # adguardhome:
+  #   # image: adguard/adguardhome:arm64-latest
+  #   image: adguard/adguardhome:latest
+  #   hostname: adguardhome
+  #   container_name: adguardhome
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #   volumes:
+  #     - /mnt/smg2t/config/adguard-home/work:/opt/adguardhome/work
+  #     - /mnt/smg2t/config/adguard-home/conf:/opt/adguardhome/conf
+  #   restart: unless-stopped
+  #   networks:
+  #     macvlan:
+  #       ipv4_address: 192.168.100.128
+
+  # emby:
+  #   image: emby/embyserver:4.8.0.34
+  #   container_name: emby
+  #   hostname: emby
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #     - PUID=1000
+  #     - PGID=1000
+  #   volumes:
+  #     - /mnt/smg2t/config/emby/config:/config
+  #     - /mnt/smg2t/config/emby/cache:/cache
+  #     - /mnt/smg2t/media:/media
+  #   # restart: unless-stopped
+  #   restart: on-failure
+  #   # user: 1000:1000
+  #   group_add:
+  #     - "110"
+  #   devices:
+  #     - /dev/dri/renderD128:/dev/dri/renderD128
+  #   networks:
+  #     macvlan:
+  #       ipv4_address: 192.168.100.131
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    hostname: jellyfin
+    environment:
+      - TZ=Europe/Bucharest
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/smg2t/config/jellyfin/config:/config
+      - /mnt/smg2t/config/jellyfin/cache:/cache
+      - /mnt/smg2t/media:/media
+    restart: "unless-stopped"
+    # user: 1000:1000
+    group_add:
+      - "110"
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    networks:
+      macvlan:
+        ipv4_address: 192.168.100.132
+
+  # jellyfin2:
+  #   image: jellyfin/jellyfin:latest
+  #   container_name: jellyfin2
+  #   hostname: jellyfin2
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #     - PUID=1000
+  #     - PGID=1000
+  #   volumes:
+  #     - /mnt/smg2t/config/jellyfin2/config:/config
+  #     - /mnt/smg2t/config/jellyfin2/cache:/cache
+  #     - /mnt/smg2t/media2:/media
+  #   restart: "unless-stopped"
+  #   group_add:
+  #     - "110"
+  #   devices:
+  #     - /dev/dri:/dev/dri
+  #   networks:
+  #     macvlan:
+  #       ipv4_address: 192.168.100.129
+
+  # qbittorrent2:
+  #   image: linuxserver/qbittorrent:latest
+  #   hostname: qbittorrent2
+  #   container_name: qbittorrent2
+  #   environment:
+  #     - TZ=Europe/Bucharest
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - UMASK_SET=022
+  #     - WEBUI_PORT=8080
+  #   volumes:
+  #     - /mnt/smg2t/config/qbittorrent2:/config
+  #     - /mnt/smg2t/media2:/downloads
+  #   restart: unless-stopped
+  #   networks:
+  #     macvlan:
+  #       ipv4_address: 192.168.100.130
+
+  # sonarr:
+  #   image: lscr.io/linuxserver/sonarr:latest
+  #   container_name: sonarr
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Etc/UTC
+  #   volumes:
+  #     - /mnt/smg2t/config/sonarr/config:/config
+  #     - /mnt/smg2t/media/TV-Shows:/tv #optional
+  #     - /mnt/smg2t/config/sonarr/downloadclient:/downloads #optional
+  #   ports:
+  #     - 8989:8989
+  #   restart: unless-stopped
+
+networks:
+  # svc-net:
+  #   name: svc-net
+  #   driver: bridge
+  macvlan:
+    name: macvlan
+    driver: macvlan
+    driver_opts:
+      parent: enp1s0
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.100.0/24
+          gateway: 192.168.100.1
+          ip_range: 192.168.100.128/25

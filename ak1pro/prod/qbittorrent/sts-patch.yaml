@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qbittorrent
+spec:
+  template:
+    spec:
+      containers:
+        - name: qbittorrent
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+      volumes:
+        - name: config
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/config/qbittorrent
+        - name: downloads
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/media

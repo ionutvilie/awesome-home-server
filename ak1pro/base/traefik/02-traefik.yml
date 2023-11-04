@@ -1,0 +1,38 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: traefik-deployment
+  labels:
+    app: traefik
+  namespace: kube-public
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik-account
+      containers:
+        - name: traefik
+          image: traefik:v2.10
+          args:
+            - --api.insecure
+            - --providers.kubernetesingress
+            - --entryPoints.web.address=:80
+            - --entryPoints.web.forwardedHeaders.insecure
+            - --entrypoints.web.http.redirections.entryPoint.to=websecure
+            - --entrypoints.web.http.redirections.entrypoint.scheme=https
+            - --entryPoints.websecure.address=:443
+            - --entryPoints.websecure.forwardedHeaders.insecure
+            - --serverstransport.insecureskipverify=true
+          ports:
+            - name: web
+              containerPort: 80
+            - name: secureweb
+              containerPort: 443
+            - name: dashboard
+              containerPort: 8080

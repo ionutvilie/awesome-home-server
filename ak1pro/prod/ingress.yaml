@@ -1,0 +1,53 @@
+# migrated to k8s gateway-api
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: home-stable
+#   namespace: prod
+#   annotations:
+#     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+#     traefik.ingress.kubernetes.io/router.tls: "true"
+# spec:
+#   rules:
+#     - host: jf-stable.cp.n1l.ro
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: jellyfin
+#                 port:
+#                   name: web-ui
+#     - host: qb-stable.cp.n1l.ro
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: qbittorrent
+#                 port:
+#                   name: web-ui
+#     - host: homarr.cp.n1l.ro
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: homarr
+#                 port:
+#                   name: web-ui
+#     - host: files.cp.n1l.ro
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: filebrowser
+#                 port:
+#                   name: web-ui
+#   tls:
+#     - secretName: cp-n1l-ro-tls

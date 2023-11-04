@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ak1pro-n1l-ro
+  namespace: kube-public
+spec:
+  secretName: ak1pro-n1l-ro-tls
+  issuerRef:
+    name: letsencrypt
+    # name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - "ak1pro.n1l.ro"
+    - "*.ak1pro.n1l.ro"
