@@ -12,7 +12,7 @@ spec:
   hostnames:
     # - "*.ak1pro.n1l.ro" # this route escapes NS confinement and works also for prod routes
     - "qb-staging.ak1pro.n1l.ro"
-    - "qb-staging.ak1pro.n1l.ro"
+    - "jf-staging.ak1pro.n1l.ro"
   rules:
     - filters:
         - type: RequestRedirect
@@ -32,7 +32,6 @@ spec:
       sectionName: https
   hostnames:
     - "qb-staging.ak1pro.n1l.ro"
-    - "jf-staging.ak1pro.n1l.ro"
   rules:
     - matches:
         - path:
