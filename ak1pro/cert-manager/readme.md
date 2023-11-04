@@ -9,7 +9,9 @@
 kubectl apply -k ak1pro/cert-manager
 ```
 
-## Cloudflare ACME DNS01 Challenge
+## ClusterIssuers
+
+Cloudflare ACME DNS01 Challenge
 
 - https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/#api-tokens
 
@@ -20,6 +22,8 @@ export CLOUDFLARE_API_TOKEN_SECRET_NAME=<>
 kubectl -n cert-manager  create secret generic cloudflare-api-token-secret \
 --from-literal=api-token=$(bws secret get ${CLOUDFLARE_API_TOKEN_SECRET_NAME} | jq -r '.value')  \
 --dry-run=client -o yaml
+
+kubectl apply -f ak1pro/cert-manager/ClusterIssuer.yaml
 ```
 
 ## Certificates
