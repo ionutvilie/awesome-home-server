@@ -1,0 +1,23 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: jwt-example
+  namespace: staging
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: qb-staging
+  jwt:
+    providers:
+      - name: login_microsoftonline_com
+        # https://login.microsoftonline.com/55fdfc12-5447-45bc-9836-71c8bdd2105b/v2.0/.well-known/openid-configuration
+        issuer: https://login.microsoftonline.com/55fdfc12-5447-45bc-9836-71c8bdd2105b/v2.0
+        audiences:
+          - 00000003-0000-0000-c000-000000000000
+        claimToHeaders:
+          - header: x-jwt-claim-sub
+            claim: sub
+        remoteJWKS:
+          uri: https://login.microsoftonline.com/55fdfc12-5447-45bc-9836-71c8bdd2105b/discovery/v2.0/keys

@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin-deployment
+  labels:
+    app: httpbin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+  template:
+    metadata:
+      labels:
+        app: httpbin
+    spec:
+      containers:
+        # envoy
+        - name: envoy
+          args:
+            - -c $(CONFIG_FILE)
+            - -l $(LOG_LEVEL)
+            - --service-cluster $(SERVICE_CLUSTER)
+            - --service-node $(SERVICE_NODE)
+          env:
+            - name: CONFIG_FILE
+              value: /opt/envoy/envoy.yaml
+            - name: LOG_LEVEL
+              # value: debug
+              value: info
+            - name: SERVICE_CLUSTER
+              value: envoy
+            - name: SERVICE_NODE
+              value: envoy
+          image: envoyproxy/envoy:v1.28.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 200m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 50Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /opt/envoy/
+              name: envoy-yaml
+            - mountPath: /etc/envoy/hmac-secret.yaml
+              name: envoy-hmac
+              subPath: hmac-secret.yaml
+            - mountPath: /etc/envoy/token-secret.yaml
+              name: envoy-token
+              subPath: token-secret.yaml
+
+        # httpbin
+        - name: httpbin
+          image: mccutchen/go-httpbin
+          ports:
+            - containerPort: 80
+          env:
+            - name: PORT
+              value: "80"
+
+      volumes:
+        - name: envoy-yaml
+          configMap:
+            name: httpbin-envoy-yaml
+            items:
+              - key: envoy.yaml
+                path: envoy.yaml
+        - name: envoy-hmac
+          configMap:
+            name: httpbin-envoy-hmac
+            items:
+              - key: hmac-secret.yaml
+                path: hmac-secret.yaml
+        - name: envoy-token
+          configMap:
+            name: httpbin-envoy-token
+            items:
+              - key: token-secret.yaml
+                path: token-secret.yaml
