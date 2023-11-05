@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: prod
+namespace: staging
 
 labels:
   - includeSelectors: true
@@ -10,7 +10,3 @@ labels:
 resources:
   - jellyfin-sts.yaml
   - jellyfin-svc.yaml
-# configMapGenerator:
-#   - name: jellyfin-proxy-envoy
-#     files:
-#       - envoy.yaml=envoy.yaml
