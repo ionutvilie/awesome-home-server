@@ -8,5 +8,10 @@ labels:
       app.kubernetes.io/name: sonarr
 
 resources:
-  - deployment.yaml
-  - service.yaml
+  - ../../base/sonarr
+  - httproute.yaml
+
+images:
+  - name: lscr.io/linuxserver/sonarr:latest
+    newName: lscr.io/linuxserver/sonarr
+    newTag: develop

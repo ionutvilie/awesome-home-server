@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: sonarr
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app.kubernetes.io/name: sonarr
   ports:
