@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: prod
+namespace: staging
 
 labels:
   - includeSelectors: true
@@ -8,5 +8,5 @@ labels:
       app.kubernetes.io/name: homarr
 
 resources:
-  - homarr-sts.yaml
-  - homarr-svc.yaml
+  - deployment.yaml
+  - service.yaml

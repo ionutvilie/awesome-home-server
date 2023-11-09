@@ -1,9 +1,8 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: filebrowser
 spec:
-  serviceName: filebrowser
   replicas: 1
   selector:
     matchLabels:

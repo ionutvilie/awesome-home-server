@@ -1,9 +1,8 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: homarr
 spec:
-  serviceName: homarr
   replicas: 1
   selector:
     matchLabels:
