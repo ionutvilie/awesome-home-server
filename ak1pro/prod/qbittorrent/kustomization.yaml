@@ -2,6 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: prod
+labels:
+  - includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: qbittorrent
 
 images:
   - name: linuxserver/qbittorrent
@@ -15,16 +19,14 @@ patches:
   - path: sts-patch.yaml
     target:
       kind: StatefulSet
-  - patch: |-
-      - op: add
-        path: /spec/loadBalancerIP
-        value: 192.168.100.211
-    target:
-      kind: Service
-      name: qbittorrent
-      version: v1
-
-labels:
-  - includeSelectors: true
-    pairs:
-      app.kubernetes.io/name: qbittorrent
+  # - patch: |-
+  #     - op: replace
+  #       path: /spec/type
+  #       value: LoadBalancer
+  #     - op: add
+  #       path: /spec/loadBalancerIP
+  #       value: 192.168.100.211
+  #   target:
+  #     kind: Service
+  #     name: qbittorrent
+  #     version: v1

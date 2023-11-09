@@ -20,6 +20,7 @@ spec:
       containers:
         - name: jellyfin
           image: jellyfin/jellyfin:latest
+          imagePullPolicy: Always
           env:
             - name: TZ
               value: "Europe/Bucharest"

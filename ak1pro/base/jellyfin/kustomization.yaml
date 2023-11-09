@@ -8,5 +8,5 @@ labels:
       app.kubernetes.io/name: jellyfin
 
 resources:
-  - jellyfin-sts.yaml
-  - jellyfin-svc.yaml
+  - statefulSet.yaml
+  - service.yaml

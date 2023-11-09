@@ -4,8 +4,7 @@ metadata:
   name: jellyfin
   namespace: staging
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 192.168.100.146
+  type: ClusterIP
   selector:
     app.kubernetes.io/name: jellyfin
   ports:
