@@ -18,13 +18,13 @@ MicroK8s config for Home Server.
 ### prod
 
 ```bash
-kubectl apply -k ak1pro/prod
+kubectl apply -k ak1pro/apps/prod
 ```
 
 ### staging
 
 ```bash
-kubectl apply -k ak1pro/staging
+kubectl apply -k ak1pro/apps/staging
 ```
 
 ## ToDo

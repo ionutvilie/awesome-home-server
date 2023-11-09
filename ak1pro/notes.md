@@ -10,7 +10,7 @@ microk8s enable metallb:192.168.100.200-192.168.100.220
 # microk8s enable multus
 microk8s enable community
 microk8s enable multus
-microk8s kubectl apply -f ak1pro/microk8s-config/network-attach-def.yaml
+microk8s kubectl apply -f ak1pro/infrastructure/microk8s-config/network-attach-def.yaml
 
 # kubernetes dashboard
 # https://vividcode.io/disable-authentication-and-https-in-kubernetes-dashboard/
@@ -20,7 +20,7 @@ microk8s kubectl -n kube-system get secret microk8s-dashboard-token -o jsonpath=
 
 # HostPath Storage
 microk8s enable hostpath-storage
-microk8s kubectl apply -f ak1pro/microk8s-config/storage-class.yaml
+microk8s kubectl apply -f ak1pro/infrastructure/microk8s-config/storage-class.yaml
 
 
 ## Gateway API
@@ -39,6 +39,6 @@ kubectl get svc -n kube-public  --selector=gateway.envoyproxy.io/owning-gateway-
 #   $ microk8s helm get all envoy-gateway -n envoy-gateway
 
 ## Namespaces
-microk8s kubectl apply -f ak1pro/microk8s-config/namespace.yaml
+microk8s kubectl apply -f ak1pro/infrastructure/microk8s-config/namespace.yaml
 
 ```
