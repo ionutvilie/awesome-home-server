@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: homarr
+    spec:
+      containers:
+        - name: homarr
+          image: ghcr.io/ajnart/homarr:latest
+          imagePullPolicy: Always
+          ports:
+            - name: web-ui
+              containerPort: 7575
+          volumeMounts:
+            - name: config
+              mountPath: /app/data/configs
+            - name: icons
+              mountPath: /app/public/icons
+            - name: dind
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: config
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/config/homarr/configs
+        - name: icons
+          hostPath:
+            type: Directory
+            path: /mnt/smg2t/config/homarr/icons
+        - name: dind
+          hostPath:
+            type: Socket
+            path: /var/snap/microk8s/common/run/containerd.sock

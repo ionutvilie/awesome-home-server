@@ -1,0 +1,120 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tls-redirect
+  namespace: prod
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: envoy-gateway
+      namespace: kube-public
+      sectionName: http
+  hostnames:
+    # - "*.ak1pro.n1l.ro" # this route escapes NS confinement and works also for staging routes
+    - "ak1pro.n1l.ro"
+    - "files.ak1pro.n1l.ro"
+    - "files-prod.ak1pro.n1l.ro"
+    - "homarr.ak1pro.n1l.ro"
+    - "homarr-prod.ak1pro.n1l.ro"
+    - "jf.ak1pro.n1l.ro"
+    - "jf-prod.ak1pro.n1l.ro"
+    - "qb.ak1pro.n1l.ro"
+    - "qb-prod.ak1pro.n1l.ro"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qb-prod
+  namespace: prod
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: envoy-gateway
+      namespace: kube-public
+      sectionName: https
+  hostnames:
+    - "qb.ak1pro.n1l.ro"
+    - "qb-prod.ak1pro.n1l.ro"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: qbittorrent
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: jf-prod
+  namespace: prod
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: envoy-gateway
+      namespace: kube-public
+      sectionName: https
+  hostnames:
+    - "jf.ak1pro.n1l.ro"
+    - "jf-prod.ak1pro.n1l.ro"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: jellyfin
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: homarr-prod
+  namespace: prod
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: envoy-gateway
+      namespace: kube-public
+      sectionName: https
+  hostnames:
+    - "ak1pro.n1l.ro"
+    - "homarr.ak1pro.n1l.ro"
+    - "homarr-prod.ak1pro.n1l.ro"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: homarr
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: files-prod
+  namespace: prod
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: envoy-gateway
+      namespace: kube-public
+      sectionName: https
+  hostnames:
+    - "files.ak1pro.n1l.ro"
+    - "files-prod.ak1pro.n1l.ro"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: filebrowser
+          port: 80

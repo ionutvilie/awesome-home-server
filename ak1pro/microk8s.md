@@ -24,7 +24,7 @@ For Jellyfin's DLNA Broadcast
 # microk8s enable multus
 microk8s enable community
 microk8s enable multus
-microk8s kubectl apply -f ak1pro/microk8s-config/network-attach-def.yaml
+microk8s kubectl apply -f ak1pro/infrastructure/microk8s-config/network-attach-def.yaml
 ```
 
 ### HostPath Storage
@@ -32,7 +32,7 @@ microk8s kubectl apply -f ak1pro/microk8s-config/network-attach-def.yaml
 ```bash
 # HostPath Storage
 microk8s enable hostpath-storage
-microk8s kubectl apply -f ak1pro/microk8s-config/storage-class.yaml
+microk8s kubectl apply -f ak1pro/infrastructure/microk8s-config/storage-class.yaml
 ```
 
 ### K8s Gateway-Api
@@ -69,11 +69,11 @@ helm search repo kubernetes-dashboard/kubernetes-dashboard --versions
 # Deploy a Helm Release named "kubernetes-dashboard" using the kubernetes-dashboard chart
 helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
 --namespace kube-system \
---values=ak1pro/microk8s-config/kubernetes-dashboard/values.yaml \
+--values=ak1pro/infrastructure/microk8s-config/kubernetes-dashboard/values.yaml \
 --version=6.0.8 --dry-run
 
 # create HTTP Route
-kubectl apply -f ak1pro/microk8s-config/k8s-dash-httproute.yaml
+kubectl apply -f ak1pro/infrastructure/microk8s-config/k8s-dash-httproute.yaml
 kubectl patch ns kube-system --type='json' \
 -p='[{"op": "add", "path": "/metadata/labels/shared-gateway-access", "value": "true"}]'
 

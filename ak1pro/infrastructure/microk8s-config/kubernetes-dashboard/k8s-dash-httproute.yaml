@@ -1,0 +1,21 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: envoy-gateway
+      namespace: kube-public
+      sectionName: https
+  hostnames:
+    - "k8s.ak1pro.n1l.ro"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: kubernetes-dashboard
+          port: 80
